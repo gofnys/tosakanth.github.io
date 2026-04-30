@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOSAKANTH | ราคาโปรแกรม HR ที่ทำงานใน LINE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Sans+Thai:wght@400;500;600&amp;display=swap');
+        
+        body {
+            font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+        }
+        
+        .pricing-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        
+        .feature-row:hover {
+            background-color: #f0fdf4;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e2e8f0;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #00C300;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        .line-green {
+            color: #00C300;
+        }
+        
+        .nav-active {
+            color: #00C300;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-x-3">
+                <div class="w-10 h-10 bg-[#00C300] rounded-xl flex items-center justify-center">
+                    <span class="text-white font-bold text-2xl">T</span>
+                </div>
+                <div>
+                    <span class="font-bold text-2xl text-gray-900">TOSAKANTH</span>
+                    <span class="text-[#00C300] text-sm font-medium">LINE HR</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-8 text-sm">
+                <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">ฟีเจอร์</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">ราคา</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">ลูกค้า</a>
+                <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">บล็อก</a>
+                <button onclick="contactSales()" 
+                        class="px-5 py-2.5 bg-[#00C300] hover:bg-green-600 text-white text-sm font-semibold rounded-xl transition-colors">
+                    ขอใบเสนอราคา
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="max-w-7xl mx-auto px-6 pt-12 pb-8">
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center gap-x-2 bg-green-100 text-[#00C300] px-4 py-1 rounded-full text-sm font-medium mb-4">
+                <i class="fas fa-robot"></i>
+                <span>LINE-Native HR Platform อันดับ 1 ของไทย</span>
+            </div>
+            <h1 class="text-5xl font-bold text-gray-900 tracking-tight">HR ที่ทำงานใน LINE ได้จริง</h1>
+            <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">ไม่ต้องดาวน์โหลดแอป ไม่ต้องเปลี่ยนพฤติกรรมพนักงาน<br>ทุกอย่างอยู่ใน LINE ที่พนักงานใช้ทุกวัน</p>
+        </div>
+
+        <!-- User Count Slider -->
+        <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8 mb-12 border border-gray-100">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <div class="text-sm font-medium text-gray-500">จำนวนพนักงาน</div>
+                    <div id="user-count-display" class="text-5xl font-bold text-gray-900">50</div>
+                    <div class="text-sm text-gray-500">คน</div>
+                </div>
+                
+                <div class="text-right">
+                    <div class="text-sm font-medium text-gray-500">ราคาเฉลี่ยต่อคน/เดือน</div>
+                    <div class="flex items-baseline gap-x-1">
+                        <span id="avg-price" class="text-4xl font-bold text-[#00C300]">฿98</span>
+                        <span class="text-gray-500">/คน</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relative pt-2 pb-4">
+                <input type="range" id="user-slider" 
+                       class="w-full accent-[#00C300]" 
+                       min="10" max="300" step="5" value="50">
+                
+                <div class="flex justify-between text-xs text-gray-400 mt-1.5 px-1">
+                    <div>10</div>
+                    <div>30</div>
+                    <div>50</div>
+                    <div>100</div>
+                    <div>200</div>
+                    <div>300</div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center gap-x-4 mt-4">
+                <div class="flex items-center gap-x-2 bg-green-50 text-[#00C300] rounded-full px-4 py-1 text-sm font-medium">
+                    <i class="fas fa-check-circle"></i>
+                    <span>ราคาลดตามจำนวนคน</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Toggle -->
+    <div class="max-w-7xl mx-auto px-6 mb-8">
+        <div class="flex justify-center">
+            <div class="inline-flex bg-gray-100 p-1 rounded-2xl shadow-inner">
+                <button onclick="switchPricing('monthly')" id="btn-monthly"
+                        class="px-8 py-2.5 text-sm font-semibold rounded-xl bg-white shadow text-gray-900 flex items-center gap-x-2 active">
+                    <span>รายเดือน</span>
+                </button>
+                <button onclick="switchPricing('annual')" id="btn-annual"
+                        class="px-8 py-2.5 text-sm font-semibold rounded-xl text-gray-600 flex items-center gap-x-2 hover:text-gray-900">
+                    <span>รายปี</span>
+                    <span class="text-[#00C300] text-xs font-bold bg-green-100 px-2 py-0.5 rounded-full">-25%</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="max-w-7xl mx-auto px-6 pb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- Starter Plan -->
+            <div class="pricing-card bg-white border border-gray-200 rounded-3xl p-8 flex flex-col">
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-semibold text-xl">Starter</div>
+                            <div class="text-sm text-gray-500">สำหรับทีมเล็ก 1-30 คน</div>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 text-[#00C300] rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-rocket text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex items-end gap-x-1">
+                        <span id="price-starter" class="text-6xl font-bold text-gray-900">1,290</span>
+                        <span class="text-gray-500 mb-1">บาท/เดือน</span>
+                    </div>
+                    <div class="text-xs text-[#00C300] font-medium">เฉลี่ย ฿43 ต่อคน</div>
+                </div>
+                
+                <div class="mt-auto space-y-3">
+                    <button onclick="startTrial('Starter')" 
+                            class="w-full py-3.5 bg-[#00C300] hover:bg-green-600 text-white font-semibold rounded-2xl text-sm transition-colors">
+                        เริ่มทดลองใช้งานฟรี 14 วัน
+                    </button>
+                    <button onclick="getQuote('Starter')" 
+                            class="w-full py-3 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
+                        พร้อมใบเสนอราคา
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Growth Plan -->
+            <div class="pricing-card bg-white border-2 border-[#00C300] rounded-3xl p-8 flex flex-col relative">
+                <div class="absolute -top-3 right-6 bg-[#00C300] text-white text-xs font-bold px-4 py-1 rounded-full">แนะนำสำหรับ SME</div>
+                
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-semibold text-xl">Growth</div>
+                            <div class="text-sm text-gray-500">ทีม 30-100 คน</div>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 text-[#00C300] rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-chart-line text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex items-end gap-x-1">
+                        <span id="price-growth" class="text-6xl font-bold text-gray-900">3,490</span>
+                        <span class="text-gray-500 mb-1">บาท/เดือน</span>
+                    </div>
+                    <div class="text-xs text-[#00C300] font-medium">เฉลี่ย ฿70 ต่อคน</div>
+                </div>
+                
+                <div class="mt-auto space-y-3">
+                    <button onclick="startTrial('Growth')" 
+                            class="w-full py-3.5 bg-[#00C300] hover:bg-green-600 text-white font-semibold rounded-2xl text-sm transition-colors">
+                        เริ่มทดลองใช้งานฟรี 14 วัน
+                    </button>
+                    <button onclick="getQuote('Growth')" 
+                            class="w-full py-3 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
+                        พร้อมใบเสนอราคา
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Pro Plan -->
+            <div class="pricing-card bg-white border border-gray-200 rounded-3xl p-8 flex flex-col">
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-semibold text-xl">Pro</div>
+                            <div class="text-sm text-gray-500">ทีม 100-200 คน + AI</div>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-magic text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex items-end gap-x-1">
+                        <span id="price-pro" class="text-6xl font-bold text-gray-900">7,990</span>
+                        <span class="text-gray-500 mb-1">บาท/เดือน</span>
+                    </div>
+                    <div class="text-xs text-[#00C300] font-medium">เฉลี่ย ฿80 ต่อคน</div>
+                </div>
+                
+                <div class="mt-auto space-y-3">
+                    <button onclick="startTrial('Pro')" 
+                            class="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-2xl text-sm transition-colors">
+                        เริ่มทดลองใช้งานฟรี 14 วัน
+                    </button>
+                    <button onclick="getQuote('Pro')" 
+                            class="w-full py-3 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 rounded-2xl transition-colors">
+                        พร้อมใบเสนอราคา
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Enterprise Plan -->
+            <div class="pricing-card bg-gradient-to-br from-gray-900 to-black text-white border border-gray-800 rounded-3xl p-8 flex flex-col relative overflow-hidden">
+                <div class="absolute -top-3 right-6 bg-amber-400 text-black text-xs font-bold px-4 py-1 rounded-full">สำหรับองค์กรใหญ่</div>
+                
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-semibold text-xl">Enterprise</div>
+                            <div class="text-sm text-gray-400">ไม่จำกัดผู้ใช้ + Support เต็มรูปแบบ</div>
+                        </div>
+                        <div class="w-12 h-12 bg-white/10 backdrop-blur text-white rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-building text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex items-end gap-x-1">
+                        <span id="price-enterprise" class="text-6xl font-bold">14,990</span>
+                        <span class="text-gray-400 mb-1">บาท/เดือน</span>
+                    </div>
+                    <div class="text-xs text-emerald-400 font-medium">ราคาต่อองค์กร</div>
+                </div>
+                
+                <div class="mt-auto space-y-3">
+                    <button onclick="startTrial('Enterprise')" 
+                            class="w-full py-3.5 bg-white text-black font-semibold rounded-2xl text-sm hover:bg-gray-100 transition-colors">
+                        เริ่มทดลองใช้งานฟรี 30 วัน
+                    </button>
+                    <button onclick="getQuote('Enterprise')" 
+                            class="w-full py-3 text-sm font-medium border border-white/30 hover:bg-white/10 rounded-2xl transition-colors">
+                        ติดต่อทีมขาย
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="max-w-7xl mx-auto px-6 pb-20">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900">เปรียบเทียบฟีเจอร์ทั้ง 4 แพ็กเกจ</h2>
+                <p class="text-gray-600 mt-2">กอฟสามารถแก้ไขชื่อฟีเจอร์ ติ๊ก/ยกเลิก และเพิ่มฟีเจอร์ใหม่ได้โดยตรง (ข้อมูลบันทึกอัตโนมัติ)</p>
+            </div>
+            
+            <button onclick="addNewFeatureRow()" 
+                    class="flex items-center gap-x-2 px-5 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-sm font-medium rounded-2xl">
+                <i class="fas fa-plus"></i>
+                <span>เพิ่มฟีเจอร์ใหม่</span>
+            </button>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-[#00C300] text-white">
+                        <th class="px-8 py-5 text-left font-semibold w-80">ฟีเจอร์ (LINE-Native)</th>
+                        <th class="px-6 py-5 text-center font-semibold">Starter</th>
+                        <th class="px-6 py-5 text-center font-semibold">Growth</th>
+                        <th class="px-6 py-5 text-center font-semibold">Pro</th>
+                        <th class="px-6 py-5 text-center font-semibold">Enterprise</th>
+                    </tr>
+                </thead>
+                <tbody id="feature-table-body" class="divide-y divide-gray-100 text-sm">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <p class="text-xs text-gray-500">ราคาไม่รวมภาษีมูลค่าเพิ่ม 7% • อัปเดตล่าสุด 30 เมษายน 2569 • ฟรีตลอดไปสำหรับทีมไม่เกิน 10 คน (Starter เท่านั้น)</p>
+        </div>
+    </div>
+
+    <script>
+        let currentUsers = 50;
+        let currentPricingType = 'monthly';
+        
+        // Features จากภาพ LINE Intern จริง + AI เลือก
+        let features = [
+            { name: "Check-in / Check-out ผ่าน LINE", starter: true, growth: true, pro: true, enterprise: true },
+            { name: "รูปวันนี้ + สรุปประจำวัน (AI สรุป)", starter: true, growth: true, pro: true, enterprise: true },
+            { name: "ประวัติการทำงาน + วันลาคงเหลือ", starter: true, growth: true, pro: true, enterprise: true },
+            { name: "ขอ OT + อนุมัติ OT", starter: false, growth: true, pro: true, enterprise: true },
+            { name: "ขอลางาน + อนุมัติ (หลายระดับ)", starter: false, growth: true, pro: true, enterprise: true },
+            { name: "Payroll + สลิปเงินเดือน", starter: false, growth: true, pro: true, enterprise: true },
+            { name: "จัดการใบเสร็จ + วิเคราะห์ด้วย AI", starter: false, growth: false, pro: true, enterprise: true },
+            { name: "อนุมัติเอกสารหลายระดับ", starter: false, growth: false, pro: true, enterprise: true },
+            { name: "Dashboard + รายงานเรียลไทม์", starter: true, growth: true, pro: true, enterprise: true },
+            { name: "จัดการพนักงาน + โครงสร้างองค์กร", starter: false, growth: true, pro: true, enterprise: true },
+            { name: "แจ้งเตือนอัตโนมัติผ่าน LINE", starter: true, growth: true, pro: true, enterprise: true },
+            { name: "AI แนะนำเมนู + คำตอบอัตโนมัติ", starter: false, growth: false, pro: true, enterprise: true },
+            { name: "API เชื่อมต่อระบบอื่น (ERP, Accounting)", starter: false, growth: false, pro: false, enterprise: true },
+            { name: "White Label + Custom Domain", starter: false, growth: false, pro: false, enterprise: true },
+            { name: "Support + Training เต็มรูปแบบ", starter: false, growth: false, pro: true, enterprise: true }
+        ];
+        
+        function updatePrices() {
+            const users = parseInt(document.getElementById('user-slider').value);
+            currentUsers = users;
+            document.getElementById('user-count-display').textContent = users;
+            
+            // AI Pricing Logic (สมจริงสำหรับตลาดไทย)
+            let starterBase = 1290;
+            let growthBase = 3490;
+            let proBase = 7990;
+            let enterpriseBase = 14990;
+            
+            let multiplier = 1;
+            if (users <= 30) multiplier = 0.9;
+            else if (users <= 50) multiplier = 1;
+            else if (users <= 100) multiplier = 1.2;
+            else if (users <= 200) multiplier = 1.5;
+            else multiplier = 1.8;
+            
+            let starterPrice = Math.round(starterBase * multiplier);
+            let growthPrice = Math.round(growthBase * multiplier);
+            let proPrice = Math.round(proBase * multiplier);
+            let enterprisePrice = enterpriseBase;
+            
+            if (currentPricingType === 'annual') {
+                starterPrice = Math.round(starterPrice * 0.75);
+                growthPrice = Math.round(growthPrice * 0.75);
+                proPrice = Math.round(proPrice * 0.75);
+                enterprisePrice = Math.round(enterprisePrice * 0.75);
+            }
+            
+            document.getElementById('price-starter').textContent = starterPrice.toLocaleString();
+            document.getElementById('price-growth').textContent = growthPrice.toLocaleString();
+            document.getElementById('price-pro').textContent = proPrice.toLocaleString();
+            document.getElementById('price-enterprise').textContent = enterprisePrice.toLocaleString();
+            
+            const avg = Math.round(starterPrice / users);
+            document.getElementById('avg-price').textContent = '฿' + avg;
+        }
+        
+        function switchPricing(type) {
+            currentPricingType = type;
+            
+            const btnMonthly = document.getElementById('btn-monthly');
+            const btnAnnual = document.getElementById('btn-annual');
+            
+            if (type === 'monthly') {
+                btnMonthly.classList.add('bg-white', 'shadow', 'text-gray-900');
+                btnAnnual.classList.remove('bg-white', 'shadow', 'text-gray-900');
+                btnAnnual.classList.add('text-gray-600');
+            } else {
+                btnAnnual.classList.add('bg-white', 'shadow', 'text-gray-900');
+                btnMonthly.classList.remove('bg-white', 'shadow', 'text-gray-900');
+                btnMonthly.classList.add('text-gray-600');
+            }
+            
+            updatePrices();
+        }
+        
+        function renderFeatureTable() {
+            const tbody = document.getElementById('feature-table-body');
+            tbody.innerHTML = '';
+            
+            features.forEach((feature, index) => {
+                const row = document.createElement('tr');
+                row.className = 'feature-row';
+                
+                row.innerHTML = `
+                    <td class="px-8 py-4">
+                        <div class="flex items-center gap-x-3">
+                            <input type="text" value="${feature.name}" 
+                                   class="font-medium text-gray-900 bg-transparent border border-transparent focus:border-[#00C300] focus:bg-white px-2 py-1 rounded w-full"
+                                   onchange="updateFeatureName(${index}, this.value)">
+                            <button onclick="deleteFeatureRow(${index})" class="text-red-400 hover:text-red-600 text-xs">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                    
+                    <td class="px-6 py-4 text-center">
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${feature.starter ? 'checked' : ''} 
+                                   onchange="updateFeature(${index}, 'starter', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    
+                    <td class="px-6 py-4 text-center">
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${feature.growth ? 'checked' : ''} 
+                                   onchange="updateFeature(${index}, 'growth', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    
+                    <td class="px-6 py-4 text-center">
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${feature.pro ? 'checked' : ''} 
+                                   onchange="updateFeature(${index}, 'pro', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    
+                    <td class="px-6 py-4 text-center">
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${feature.enterprise ? 'checked' : ''} 
+                                   onchange="updateFeature(${index}, 'enterprise', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateFeature(index, plan, value) {
+            features[index][plan] = value;
+            localStorage.setItem('tosakanthFeatures', JSON.stringify(features));
+        }
+        
+        function updateFeatureName(index, newName) {
+            features[index].name = newName;
+            localStorage.setItem('tosakanthFeatures', JSON.stringify(features));
+        }
+        
+        function deleteFeatureRow(index) {
+            if (confirm('ต้องการลบฟีเจอร์นี้ใช่ไหม?')) {
+                features.splice(index, 1);
+                renderFeatureTable();
+                localStorage.setItem('tosakanthFeatures', JSON.stringify(features));
+            }
+        }
+        
+        function addNewFeatureRow() {
+            const newFeature = {
+                name: "ฟีเจอร์ใหม่ (แก้ไขได้)",
+                starter: false,
+                growth: false,
+                pro: false,
+                enterprise: false
+            };
+            features.push(newFeature);
+            renderFeatureTable();
+            localStorage.setItem('tosakanthFeatures', JSON.stringify(features));
+        }
+        
+        function initializeSlider() {
+            const slider = document.getElementById('user-slider');
+            
+            slider.addEventListener('input', function() {
+                updatePrices();
+            });
+            
+            slider.value = currentUsers;
+            updatePrices();
+            
+            const saved = localStorage.getItem('tosakanthFeatures');
+            if (saved) {
+                features = JSON.parse(saved);
+            }
+            
+            renderFeatureTable();
+        }
+        
+        function startTrial(plan) {
+            const users = document.getElementById('user-slider').value;
+            alert(`เริ่มทดลองใช้งานฟรี 14 วัน แพ็กเกจ ${plan}\nจำนวนพนักงาน: ${users} คน\n\nลิงก์ทดลองจะถูกส่งไปยังอีเมลของคุณในไม่กี่นาที`);
+        }
+        
+        function getQuote(plan) {
+            const users = document.getElementById('user-slider').value;
+            const priceEl = document.getElementById(`price-${plan.toLowerCase()}`);
+            const price = priceEl.textContent;
+            
+            alert(`ขอใบเสนอราคา\n\nแพ็กเกจ: ${plan}\nจำนวนพนักงาน: ${users} คน\nราคาประมาณ: ฿${price} / เดือน\n\nทีมขายจะติดต่อกลับภายใน 1 ชั่วโมง`);
+        }
+        
+        function contactSales() {
+            alert('ขอบคุณครับ! ทีมขาย TOSAKANTH จะติดต่อกลับภายใน 1 ชั่วโมง\nหรือโทร 02-xxx-xxxx ได้เลย');
+        }
+        
+        function initialize() {
+            initializeSlider();
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.metaKey && e.key === "/") {
+                    e.preventDefault();
+                    addNewFeatureRow();
+                }
+            });
+            
+            setTimeout(() => {
+                const hint = document.createElement('div');
+                hint.className = 'fixed bottom-6 right-6 bg-[#00C300] text-white text-xs px-4 py-2 rounded-2xl shadow-lg flex items-center gap-x-2';
+                hint.innerHTML = `<i class="fas fa-info-circle"></i> <span>กด <strong>⌘ + /</strong> เพื่อเพิ่มฟีเจอร์ใหม่</span>`;
+                document.body.appendChild(hint);
+                
+                setTimeout(() => {
+                    hint.style.transition = 'all 0.4s';
+                    hint.style.opacity = '0';
+                    setTimeout(() => hint.remove(), 400);
+                }, 5000);
+            }, 6000);
+            
+            console.log('%c[TOSAKANTH Pricing] Page ready. Fully editable by boss.', 'color:#00C300');
+        }
+        
+        window.onload = initialize;
+    </script>
+</body>
+</html>
